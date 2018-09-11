@@ -1,6 +1,6 @@
 const fs = require('fs');
 const recast = require('recast');
-const babel = require('@babel/parser');
+const babel = require('recast/parsers/babylon');
 const traverse = require('@babel/traverse').default;
 
 const recastOptions = {
@@ -13,19 +13,7 @@ const source = fs.readFileSync('./code.js', 'utf-8');
 
 const ast = recast.parse(source, {
   ...recastOptions,
-  parser: {
-    parse: (code) => babel.parse(code, {
-      allowImportExportEverywhere: true,
-      sourceType: 'module',
-      plugins: [
-        'jsx',
-        'objectRestSpread',
-        'classProperties',
-        'functionBind',
-        'dynamicImport'
-      ]
-    })
-  }
+  parser: babel
 });
 
 const findExpressionStatement = (ast) => {
